@@ -4,12 +4,14 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/letanthang/my_framework/db"
 )
 
 func GetStudent(c echo.Context) error {
-	data := map[string]interface{}{
-		"class_name": "Golang course",
-		"students":   []string{"A", "B", "C"},
-	}
-	return c.JSON(http.StatusOK, data)
+	student, _ := db.GetStudent()
+	return c.JSON(http.StatusOK, student)
+}
+
+func CheckHealth(c echo.Context) error {
+	return c.String(http.StatusOK, "OK")
 }

@@ -8,9 +8,10 @@ import (
 func Public(e *echo.Echo) {
 	publicRoute := e.Group("/v1/public")
 	publicRoute.GET("/student", handlers.GetStudent)
+	publicRoute.GET("/health", handlers.CheckHealth)
 }
 
 func Staff(e *echo.Echo) {
-	publicRoute := e.Group("/v1/staff")
-	publicRoute.POST("/student", handlers.AddStudent)
+	staffRoute := e.Group("/v1/staff")
+	staffRoute.POST("/student", handlers.AddStudent)
 }

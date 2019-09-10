@@ -9,6 +9,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+const (
+	dbName = "go3008"
+)
+
 var client *mongo.Client
 var db *mongo.Database
 
@@ -26,5 +30,4 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	db = client.Database("go3008")
 }

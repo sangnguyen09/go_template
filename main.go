@@ -25,7 +25,6 @@ func main() {
 	// e.File("/form", "form.html")
 	route.Public(e)
 	route.Staff(e)
-
 	fmt.Println("Server listening at 9090")
 
 	port := "9090"
