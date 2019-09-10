@@ -5,12 +5,14 @@ import (
 	"time"
 
 	"github.com/letanthang/my_framework/db/types"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func GetOneStudent() (*types.Student, error) {
 	var student types.Student
 	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	err := client.Database(dbName).Collection("student").FindOne(ctx, struct{}{}).Decode(&student)
+	err := Client.Database(dbName).Collection("student").FindOne(ctx, struct{}{}).Decode(&student)
 
 	if err != nil {
 		return nil, err
@@ -20,14 +22,15 @@ func GetOneStudent() (*types.Student, error) {
 
 func GetStudent() (*[]types.Student, error) {
 	var students []types.Student
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	cur, err := client.Database(dbName).Collection("student").Find(ctx, struct{}{})
+	findOptions := options.Find()
+	findOptions.SetLimit(30)
+	cur, err := Client.Database(dbName).Collection("student").Find(context.TODO(), bson.D{{}}, findOptions)
 
 	if err != nil {
 		return nil, err
 	}
 
-	for cur.Next(nil) {
+	for cur.Next(context.TODO()) {
 		var student types.Student
 		err = cur.Decode(&student)
 		if err != nil {

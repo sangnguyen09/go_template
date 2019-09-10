@@ -13,8 +13,7 @@ const (
 	dbName = "go3008"
 )
 
-var client *mongo.Client
-var db *mongo.Database
+var Client *mongo.Client
 
 func init() {
 	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://mongoadmin:secret@localhost:27017"))
@@ -30,4 +29,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+	Client = client
 }
