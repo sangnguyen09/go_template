@@ -14,4 +14,5 @@ func Public(e *echo.Echo) {
 func Staff(e *echo.Echo) {
 	staffRoute := e.Group("/v1/staff")
 	staffRoute.POST("/student", handlers.AddStudent)
+	staffRoute.DELETE("/student", handlers.DeleteStudent)
 }

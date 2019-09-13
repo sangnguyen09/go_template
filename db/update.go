@@ -6,6 +6,8 @@ import (
 
 	"github.com/letanthang/mongo/sequence"
 	"github.com/letanthang/my_framework/db/types"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func InsertStudent(req types.StudentAddReq) (interface{}, error) {
@@ -20,4 +22,9 @@ func InsertStudent(req types.StudentAddReq) (interface{}, error) {
 	res, err := Client.Database("go3008").Collection("student").InsertOne(ctx, student)
 	id := res.InsertedID
 	return id, err
+}
+
+func DeleteStudent(id int) (*mongo.DeleteResult, error) {
+	res, err := Client.Database("go3008").Collection("student").DeleteOne(context.TODO(), bson.D{{"id", id}})
+	return res, err
 }

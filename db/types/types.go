@@ -18,3 +18,7 @@ type Student struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 }
+
+type DeleteReq struct {
+	ID int `json:"id"`
+}
