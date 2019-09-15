@@ -11,7 +11,8 @@ import (
 )
 
 func InsertStudent(req types.StudentAddReq) (interface{}, error) {
-	newID, _ := sequence.GetNextID(Client.Database(dbName).Collection("counter"), "student_id_seq")
+	newID, _ := sequence.GetNextID(Client.Database(dbName).Collection("counter"),
+		"student_id_seq")
 	student := types.Student{
 		ID:        newID,
 		FirstName: req.FirstName,

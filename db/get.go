@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/letanthang/my_framework/db/types"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -20,11 +19,34 @@ func GetOneStudent() (*types.Student, error) {
 	return &student, nil
 }
 
-func GetStudent() (*[]types.Student, error) {
+func GetAllStudent() (*[]types.Student, error) {
 	var students []types.Student
 	findOptions := options.Find()
 	findOptions.SetLimit(30)
-	cur, err := Client.Database(dbName).Collection("student").Find(context.TODO(), bson.D{{}}, findOptions)
+	cur, err := Client.Database(dbName).Collection("student").Find(context.TODO(), struct{}{}, findOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for cur.Next(context.TODO()) {
+		var student types.Student
+		err = cur.Decode(&student)
+		if err != nil {
+			return nil, err
+		}
+		students = append(students, student)
+	}
+
+	return &students, nil
+}
+
+func GetStudent(req types.StudentReq) (*[]types.Student, error) {
+	var students []types.Student
+	findOptions := options.Find()
+	findOptions.SetLimit(30)
+
+	cur, err := Client.Database(dbName).Collection("student").Find(context.TODO(), struct{}{}, findOptions)
 
 	if err != nil {
 		return nil, err

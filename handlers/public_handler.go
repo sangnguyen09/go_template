@@ -5,10 +5,24 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/letanthang/my_framework/db"
+	types "github.com/letanthang/my_framework/db/types"
+	"github.com/letanthang/validator"
 )
 
 func GetStudent(c echo.Context) error {
-	student, _ := db.GetStudent()
+	var req types.StudentReq
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, types.ErrorResponse{Code: "BadRequest", Message: "Bad request"})
+	}
+	if err := validator.Validate(req); err != nil {
+		return c.JSON(http.StatusBadRequest, types.ErrorResponse{Code: "BadRequest", Message: "Bad request"})
+	}
+	student, _ := db.GetStudent(req)
+	return c.JSON(http.StatusOK, student)
+}
+
+func GetAllStudent(c echo.Context) error {
+	student, _ := db.GetAllStudent()
 	return c.JSON(http.StatusOK, student)
 }
 

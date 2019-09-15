@@ -7,7 +7,8 @@ import (
 
 func Public(e *echo.Echo) {
 	publicRoute := e.Group("/v1/public")
-	publicRoute.GET("/student", handlers.GetStudent)
+	publicRoute.GET("/student", handlers.GetAllStudent)
+	publicRoute.PATCH("/student", handlers.GetStudent)
 	publicRoute.GET("/health", handlers.CheckHealth)
 }
 
