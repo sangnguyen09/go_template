@@ -3,15 +3,17 @@ package types
 import "time"
 
 type StudentReq struct {
-	FirstName string `json:"first_name,omitempty" validate:"required,min=2"`
-	LastName  string `json:"last_name,omitempty" validate:"required,min=2"`
-	Email     string `json:"email,omitempty" validate:"required"`
+	ID        int    `json:"id,omitempty"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	Email     string `json:"email,omitempty"`
 	ClassName string `json:"class_name,omitempty"`
 }
 
 type StudentSearchReq struct {
-	Name      string `json:"name" validate:"required,min=2"`
-	Email     string `json:"email" validate:"required"`
+	ID        int    `json:"id,omitempty"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
 	ClassName string `json:"class_name"`
 }
 
