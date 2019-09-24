@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my_fw-svc
+spec:
+  selector:
+    app: my_fw
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      name: goport
+  type: LoadBalancer

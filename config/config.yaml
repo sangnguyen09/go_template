@@ -5,6 +5,12 @@ go_postgres_database:
   name: phoenix
   debug: true
 
+mongo:
+  uri:
+  host: localhost
+  user: mongoadmin
+  password: secret
+
 paging:
   limit: 100
 

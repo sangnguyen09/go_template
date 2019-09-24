@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-fw-dep
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-fw
+  template:
+    metadata:
+      labels:
+        app: my-fw
+    spec:
+      containers:
+        - name: my-fw-cont
+          image: letanthang/my_framework
+          ports:
+            - containerPort: 80
+              name: web
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "75Mi"
+              cpu: "75m"
