@@ -68,6 +68,8 @@ github.com/letanthang/mongo v0.0.1 h1:R3TTiW20ejGw5fyGl/KP/waUkLGknHhGv+pU12MauM
 github.com/letanthang/mongo v0.0.1/go.mod h1:EkW8UUKIEAh8zU1QZrggJARhz5zU+i+W88vDnvr1xGg=
 github.com/letanthang/mongo v0.0.2 h1:b2V2EfvgkQrZbh0KFypHky10HKpvhr0xGeRCpNGqpMM=
 github.com/letanthang/mongo v0.0.2/go.mod h1:EkW8UUKIEAh8zU1QZrggJARhz5zU+i+W88vDnvr1xGg=
+github.com/letanthang/my_framework v0.0.0-20190924042124-173cb7750f57 h1:3Z/n1vJ6WLIYigbUSpn0MmFWMD3Q3t+0obYAbf4KIZ0=
+github.com/letanthang/my_framework v0.0.0-20190924042124-173cb7750f57/go.mod h1:KjMcMG9mQKbA4QGtqpMRr6zS9TKU9bHWyG8O4KslbII=
 github.com/letanthang/validator v0.0.0-20190907235915-5a19483431bb h1:roQW7iBzdb6ozoGkIO/Q+GpTcjyrnxBD5q28vML1l28=
 github.com/letanthang/validator v0.0.0-20190907235915-5a19483431bb/go.mod h1:a7+0uIkRwKLUV9hBEQW+d+rl6cTq3Pb7jR+0HMmCfXU=
 github.com/magiconair/properties v1.8.0 h1:LLgXmsheXeRoUOBOjtwPQCWIYqM/LU1ayDtDePerRcY=
