@@ -5,10 +5,14 @@ import (
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/letanthang/my_framework/route"
+	"github.com/sangnguyen09/go_template/db/mongo"
+	"github.com/sangnguyen09/go_template/router"
 )
 
 func main() {
+	mongo := &mongo.Mongo{}
+	mongo.Connect()
+
 	e := echo.New()
 	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
 		StackSize: 1 << 10, //1KB
@@ -23,8 +27,8 @@ func main() {
 	// }
 
 	// e.File("/form", "form.html")
-	route.Public(e)
-	route.Staff(e)
+	router.UserRouter(e, mongo)
+
 	fmt.Println("Server listening at 9090")
 
 	port := "9090"

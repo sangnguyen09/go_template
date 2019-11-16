@@ -1,25 +1,25 @@
 go_postgres_database:
-  host: 35.197.146.208
+  host: localhost
   user: postgres
-  password: "@bcd1@34"
-  name: phoenix
+  password: "123456@aA"
+  db_name: go_template
   debug: true
 
 mongo:
   uri:
   host: localhost
-  user: mongoadmin
-  password: secret
+  user: sangdev
+  password: "secret123"
+  db_name: go_template
 
 paging:
   limit: 100
 
 encryption:
-  oid_key: ghnexp0123456789
-  jwt_secret: secret
-  jwt_secret_partner: secret
+  jwt_secret: secret-token
   jwt_exp: 72
-  jwt_pol: 59a795909e65177c27fcdd87
+  jwt_secret_refresh: refresh-token
+  jwt_exp_refresh: 168
 
 profiler:
   prometheus: false

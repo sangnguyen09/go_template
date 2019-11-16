@@ -1,23 +1,23 @@
-package db
+package mongo
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/letanthang/my_framework/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+
+	"github.com/sangnguyen09/go_template/config"
 )
 
-const (
-	dbName = "go3008"
-)
+type Mongo struct {
+	Client *mongo.Client
+}
 
-var Client *mongo.Client
 
-func init() {
+func (m *Mongo) Connect()  {
 	uri := config.Config.Mongo.URI
 	if config.Config.Mongo.URI == "" {
 		uri = fmt.Sprintf("mongodb://%s:%s@%s:27017", config.Config.Mongo.User, config.Config.Mongo.Password, config.Config.Mongo.Host)
@@ -36,5 +36,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	Client = client
+	m.Client=client
 }
+
