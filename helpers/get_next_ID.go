@@ -18,10 +18,11 @@ func GetNextID(col *mongo.Collection, sequenceName string) (int, error) {
 	update := bson.M{"$inc": bson.M{"seq_val": 1}}
 	option := options.FindOneAndUpdate()
 	option.SetUpsert(true)
+	option.SetReturnDocument(1) // 1 là tra ve tai lieu moi sau khi update, 0 là trước update
 	var counter Counter
 	err := col.FindOneAndUpdate(context.TODO(), filter, update, option).Decode(&counter)
 	if err != nil {
 		return 1, err
 	}
-	return counter.Value + 1, err
+	return counter.Value , err
 }

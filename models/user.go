@@ -8,10 +8,13 @@ type User struct {
 	Avatar   string `json:"avatar,omitempty" bson:"avatar,omitempty"  gorm:"column:avatar"`
 }
 type LoginRequest struct {
-	Username string `json:"username" gorm:"column:password" `
-	Password string `json:"password" gorm:"column:username" `
+	Username string `json:"username" gorm:"column:username" valid:"required~Tài khoản hoặc mật khẩu không chính xác,stringlength(5|15)~Tài khoản hoặc mật khẩu không chính xác" `
+	Password string `json:"password" gorm:"column:password" valid:"required~Tài khoản hoặc mật khẩu không chính xác"`
 }
-
+type ChangePassword struct {
+	PasswordCurrent string `json:"password_current" valid:"required~Vui lòng nhập mật khẩu hiện tại"`
+	PasswordNew string `json:"password_new" bson:"password" gorm:"column:password" valid:"required~Vui lòng nhập mật khẩu mới"`
+}
 type UserResponse struct {
 	Username     string `json:"username"`
 	UserId       int `json:"user_id"`

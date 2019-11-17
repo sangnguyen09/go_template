@@ -68,7 +68,7 @@ func GenTokenRefresh(user models.User) (string, error) {
 	return t, nil
 }
 func ParseJWTToken(tokenString string) *models.JWTCustomClaims {
-	mySigningKey := []byte(fmt.Sprintf("%s", config.Config.Encryption.JWTExpRefresh))
+	mySigningKey := []byte(fmt.Sprintf("%s", config.Config.Encryption.JWTSecret))
 
 	token, err := jwt.ParseWithClaims(tokenString, &models.JWTCustomClaims{}, func(*jwt.Token) (interface{}, error) {
 		return mySigningKey, nil
