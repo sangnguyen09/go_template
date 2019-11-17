@@ -22,8 +22,8 @@ func JWTMiddleware() echo.MiddlewareFunc {
 }
 
 func GenToken(user models.User) (string, error) {
-	if user.UserId == 0 || len(user.Role) == 0 || len(user.Username) == 0 {
-		return "", errors.New("UserId == 0 || len(Role) == 0 || len(Phone) == 0")
+	if user.UserId == 0 || user.Role == 0 || len(user.Username) == 0 {
+		return "", errors.New("UserId == 0 ||Role == 0 || Phone == 0")
 	}
 
 	timeExp := time.Duration(config.Config.Encryption.JWTExp)
@@ -46,8 +46,8 @@ func GenToken(user models.User) (string, error) {
 	return t, nil
 }
 func GenTokenRefresh(user models.User) (string, error) {
-	if user.UserId == 0 || len(user.Role) == 0 || len(user.Username) == 0 {
-		return "", errors.New("UserId == 0 || len(Role) == 0 || len(Phone) == 0")
+	if user.UserId == 0 || user.Role == 0 || len(user.Username) == 0 {
+		return "", errors.New("UserId == 0 ||Role == 0 || Phone == 0")
 	}
 	timeExp := time.Duration(config.Config.Encryption.JWTExp)
 	claims := &models.JWTCustomClaims{

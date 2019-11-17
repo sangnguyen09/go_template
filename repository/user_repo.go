@@ -12,5 +12,6 @@ type UserRespository interface {
 	CheckExist(context context.Context, username string) (bool)
 	ComparePassword(context context.Context, pwdcurrent string, userId int) (bool)
 	UpdatePass(context context.Context,pwdnew string, userId int)  error
+	Delete(context context.Context, userId int) error
 	//VerifyAccount(context context.Context, registerReq *models.User)(int64, error)
 }

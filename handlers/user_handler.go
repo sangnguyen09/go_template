@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"github.com/sangnguyen09/go_template/lang"
 	"github.com/sangnguyen09/go_template/validator"
 	"net/http"
@@ -53,7 +52,7 @@ func (u *UserHandler) Register(c echo.Context) error {
 
 	//--- Mã hoá mật khẩu
 	req.Password = helpers.EncryptPass(req.Password)
-	req.Role = "member"
+	req.Role = models.MEMBER
 
 	//
 	 err := u.UserRepo.Register(ctx, req)
@@ -126,7 +125,6 @@ func (u *UserHandler) ChangePassword(c echo.Context) error {
 		}
 		//--- Validate thông tin req ----
 		if _, err := govalidator.ValidateStruct(req); err != nil {
-			fmt.Println( err.Error())
 			return helpers.ResponseErr(c, http.StatusBadRequest, err.Error())
 		}
 		if validPassCurrent := validator.ValidPassword(req.PasswordCurrent); validPassCurrent == false{
@@ -148,6 +146,37 @@ func (u *UserHandler) ChangePassword(c echo.Context) error {
 
 	//---- Update Pass to DB ----
 	err :=	u.UserRepo.UpdatePass(ctx,req.PasswordNew,claims.UserId)
+	if err != nil {
+		  	return helpers.ResponseErr(c,http.StatusInternalServerError,err.Error())
+	}
+
+	return helpers.ResponseData(c,nil)
+
+}
+ func (u *UserHandler) Delete(c echo.Context) error {
+		defer c.Request().Body.Close()
+
+	//---- Lấy thông thông tin user từ token
+		user :=  c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*models.JWTCustomClaims)
+
+		if claims.Role != models.ADMIN {
+			 return helpers.ResponseErr(c,http.StatusForbidden, "Lỗi quyền truy cập")
+		}
+
+		req := models.Delete{}
+		if err := c.Bind(&req); err != nil {
+			return helpers.ResponseErr(c, http.StatusBadRequest)
+		}
+		//--- Validate thông tin req ----
+		if _, err := govalidator.ValidateStruct(req); err != nil {
+			return helpers.ResponseErr(c, http.StatusBadRequest, err.Error())
+		}
+
+	ctx,_ := context.WithTimeout(c.Request().Context(), 10*time.Second)
+
+	//---- Delete in DB ----
+	err :=	u.UserRepo.Delete(ctx,req.UserId)
 	if err != nil {
 		  	return helpers.ResponseErr(c,http.StatusInternalServerError,err.Error())
 	}

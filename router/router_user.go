@@ -23,4 +23,6 @@ func UserRouter(e *echo.Echo, mongo *mongo.Mongo) {
 	 private := e.Group("/api/user/v1/private")
 	 private.Use(middleware.JWTMiddleware())
 	 private.PUT("/change-password", handler.ChangePassword)
+	private.DELETE("/delete", handler.Delete)
+
 }
