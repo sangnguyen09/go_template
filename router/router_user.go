@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/sangnguyen09/go_template/db/mongo"
 	"github.com/sangnguyen09/go_template/handlers"
+	"github.com/sangnguyen09/go_template/middleware"
 	"github.com/sangnguyen09/go_template/repository/repo_impl"
 )
 
@@ -19,6 +20,7 @@ func UserRouter(e *echo.Echo, mongo *mongo.Mongo) {
 	public.POST("/register", handler.Register)
 
 	//Router Private JWT
-	// private := e.Group("/api/student/v1/staff")
-	// private.POST("/student", handler.AddStudent)
+	 private := e.Group("/api/user/v1/private")
+	 private.Use(middleware.JWTMiddleware())
+	 private.PUT("/change-password", handler.ChangePassword)
 }

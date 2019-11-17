@@ -6,16 +6,21 @@ import (
 )
 
 func ValidPassword(s string) bool {
+	match, _ := regexp.MatchString(`^[a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+\.\,\;\:]+$`,s)
+	if match == false {
+			return false
+	}
 		var (
-		hasMinLen  = false
+		hasMinMax  = false
 		hasUpper   = false
 		hasLower   = false
 		hasNumber  = false
 		hasSpecial = false
 	)
-		if len(s) >= 8 {
-		hasMinLen = true
+		if 8 <= len(s) && len(s) <= 30 {
+			hasMinMax = true
 	}
+
 		for _, char := range s {
 		switch {
 	case unicode.IsUpper(char):
@@ -28,7 +33,7 @@ func ValidPassword(s string) bool {
 		hasSpecial = true
 	}
 	}
-		return hasMinLen && hasUpper && hasLower && hasNumber && hasSpecial
+		return hasMinMax && hasUpper && hasLower && hasNumber && hasSpecial
 	}
 
 func MatchRegex(s string, pattern string) bool  {

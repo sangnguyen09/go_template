@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"github.com/sangnguyen09/go_template/lang"
 	"github.com/sangnguyen09/go_template/validator"
 	"net/http"
 	"time"
-
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/sangnguyen09/go_template/middleware"
 	"github.com/sangnguyen09/go_template/models"
 	"github.com/sangnguyen09/go_template/repository"
+
 )
 
 type UserHandler struct {
@@ -54,9 +56,9 @@ func (u *UserHandler) Register(c echo.Context) error {
 	req.Role = "member"
 
 	//
-	res, err := u.UserRepo.Register(ctx, req)
+	 err := u.UserRepo.Register(ctx, req)
 	if err !=nil {
-		return helpers.ResponseErr(c, http.StatusBadRequest,res)
+		return helpers.ResponseErr(c, http.StatusBadRequest,err.Error())
 	}
 	return helpers.ResponseData(c,nil)
 
@@ -76,6 +78,16 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 	//----- ket thuc------
 
+	//--- Validate thông tin req ----
+	if _, err := govalidator.ValidateStruct(req); err != nil {
+		return helpers.ResponseErr(c, http.StatusBadRequest, err.Error())
+	}
+	if validPass := validator.ValidPassword(req.Password); validPass == false{
+		return helpers.ResponseErr(c, http.StatusBadRequest,lang.Password_incorect)
+	}
+	if validUsername := validator.MatchRegex(req.Username,`^[a-z0-9_]{5,15}$`); validUsername == false{
+		return helpers.ResponseErr(c, http.StatusBadRequest,lang.Username_incorect)
+	}
 	//--- convert pass to md5 ----/
 	req.Password = helpers.EncryptPass(req.Password)
 
@@ -98,5 +110,48 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 
 	return helpers.ResponseData(c, models.UserResponse{user.Username, user.UserId, user.Role, user.Avatar, token, refreshToken})
+
+}
+
+func (u *UserHandler) ChangePassword(c echo.Context) error {
+	defer c.Request().Body.Close()
+
+	//---- Lấy thông thông tin user từ token
+		user :=  c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*models.JWTCustomClaims)
+
+		req := models.ChangePassword{}
+		if err := c.Bind(&req); err != nil {
+			return helpers.ResponseErr(c, http.StatusBadRequest)
+		}
+		//--- Validate thông tin req ----
+		if _, err := govalidator.ValidateStruct(req); err != nil {
+			fmt.Println( err.Error())
+			return helpers.ResponseErr(c, http.StatusBadRequest, err.Error())
+		}
+		if validPassCurrent := validator.ValidPassword(req.PasswordCurrent); validPassCurrent == false{
+			return helpers.ResponseErr(c, http.StatusBadRequest,lang.Password_incorect)
+		}
+		if validPassNew := validator.ValidPassword(req.PasswordNew); validPassNew == false{
+			return helpers.ResponseErr(c, http.StatusBadRequest,lang.Password_incorect)
+		}
+
+	ctx,_ := context.WithTimeout(c.Request().Context(), 10*time.Second)
+	//--- convert pass to md5 ----/
+		req.PasswordCurrent = helpers.EncryptPass(req.PasswordCurrent)
+		req.PasswordNew = helpers.EncryptPass(req.PasswordNew)
+
+	//----- Check pass cũ -----
+	if checkPass := u.UserRepo.ComparePassword(ctx, req.PasswordCurrent, claims.UserId); checkPass == false{
+		return helpers.ResponseErr(c,http.StatusBadRequest,lang.Password_compare) // không trùng khớp
+	}
+
+	//---- Update Pass to DB ----
+	err :=	u.UserRepo.UpdatePass(ctx,req.PasswordNew,claims.UserId)
+	if err != nil {
+		  	return helpers.ResponseErr(c,http.StatusInternalServerError,err.Error())
+	}
+
+	return helpers.ResponseData(c,nil)
 
 }
