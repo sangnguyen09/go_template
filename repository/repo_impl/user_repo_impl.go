@@ -77,3 +77,15 @@ func (u *UserRepoImpl) UpdatePass(context context.Context,pwdnew string, userId 
 
 	return nil
 }
+func (u *UserRepoImpl) Delete(context context.Context, userId int)  error {
+	var deleteDocument bson.M
+	filter := bson.D{{"$and", []bson.D{ bson.D{{"user_id",userId}}, bson.D{{"user_id",bson.D{{"$ne",1}} }}, }}}// xoá user có id và id đó khác 1(admin)
+	opts := options.FindOneAndDelete()
+	opts.SetProjection(bson.D{{"username",1}}) // lấy ra field cần thiết
+	err := u.mongo.Client.Database(config.Config.Mongo.DatabaseName).Collection("users").FindOneAndDelete(context, filter, opts).Decode(&deleteDocument)
+	if err != nil {
+		return  errors.New("User Không tồn tại")
+	}
+
+	return nil
+}
